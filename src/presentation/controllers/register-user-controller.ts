@@ -1,4 +1,6 @@
 import { Controller, HttpResponse } from '@/presentation/protocols'
+import { EmailInUseError } from '@/presentation/errors'
+import { forbidden } from '@/presentation/helpers'
 import { RegisterUser } from '@/domain/usecases'
 
 export class RegisterUserController implements Controller {
@@ -7,7 +9,10 @@ export class RegisterUserController implements Controller {
   ) { }
 
   async handle (request: RegisterUserController.Params): Promise<HttpResponse> {
-    await this.registerUser.register(request)
+    const isValid = await this.registerUser.register(request)
+    if (!isValid) {
+      return forbidden(new EmailInUseError())
+    }
     return null
   }
 }
