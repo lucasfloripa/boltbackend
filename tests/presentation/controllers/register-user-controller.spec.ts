@@ -1,7 +1,7 @@
 import { RegisterUser } from '@/domain/usecases'
 import { RegisterUserController } from '@/presentation/controllers'
 import { EmailInUseError } from '@/presentation/errors'
-import { forbidden } from '@/presentation/helpers'
+import { forbidden, serverError } from '@/presentation/helpers'
 import { mockRegisterUserParams } from '@/tests/domain/mocks'
 import { mockRegisterUserStub } from '@/tests/presentation/mocks'
 
@@ -33,5 +33,13 @@ describe('RegisterUser Controller', () => {
     jest.spyOn(registerUserStub, 'register').mockReturnValueOnce(Promise.resolve(false))
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(forbidden(new EmailInUseError()))
+  })
+  test('Should return 500 if RegisterUser throws', async () => {
+    const { sut, registerUserStub } = makeSut()
+    jest.spyOn(registerUserStub, 'register').mockImplementationOnce(async () => {
+      return await Promise.reject(new Error())
+    })
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(serverError(new Error()))
   })
 })
