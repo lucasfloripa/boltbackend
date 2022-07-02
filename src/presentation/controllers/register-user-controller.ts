@@ -1,6 +1,6 @@
 import { Controller, HttpResponse, Validation } from '@/presentation/protocols'
 import { EmailInUseError } from '@/presentation/errors'
-import { badRequest, forbidden, serverError } from '@/presentation/helpers'
+import { badRequest, forbidden, serverError, ok } from '@/presentation/helpers'
 import { RegisterUser } from '@/domain/usecases'
 
 export class RegisterUserController implements Controller {
@@ -19,7 +19,7 @@ export class RegisterUserController implements Controller {
       if (!isValid) {
         return forbidden(new EmailInUseError())
       }
-      return null
+      return ok({ message: `${request.email} register!` })
     } catch (error) {
       return serverError(error)
     }
