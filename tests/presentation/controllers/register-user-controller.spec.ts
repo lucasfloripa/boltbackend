@@ -4,7 +4,8 @@ import { EmailInUseError } from '@/presentation/errors'
 import { badRequest, forbidden, ok, serverError } from '@/presentation/helpers'
 import { Validation } from '@/presentation/protocols'
 import { mockRegisterUserParams } from '@/tests/domain/mocks'
-import { mockRegisterUserStub, mockValidationStub } from '@/tests/presentation/mocks'
+import { mockRegisterUserStub } from '@/tests/presentation/mocks'
+import { mockValidationStub } from '@/tests/utils/mocks'
 
 const mockRequest = (): RegisterUserController.Params => ({
   email: 'any_email@mail.com',
