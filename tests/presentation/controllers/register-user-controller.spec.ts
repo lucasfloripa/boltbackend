@@ -1,7 +1,7 @@
 import { RegisterUser } from '@/domain/usecases'
 import { RegisterUserController } from '@/presentation/controllers'
 import { EmailInUseError } from '@/presentation/errors'
-import { badRequest, forbidden, serverError } from '@/presentation/helpers'
+import { badRequest, forbidden, ok, serverError } from '@/presentation/helpers'
 import { Validation } from '@/presentation/protocols'
 import { mockRegisterUserParams } from '@/tests/domain/mocks'
 import { mockRegisterUserStub, mockValidationStub } from '@/tests/presentation/mocks'
@@ -56,5 +56,11 @@ describe('RegisterUser Controller', () => {
     })
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(serverError(new Error()))
+  })
+  test('Should return 200 on success', async () => {
+    const { sut } = makeSut()
+    const request = mockRequest()
+    const httpResponse = await sut.handle(request)
+    expect(httpResponse).toEqual(ok({ message: `${request.email} register!` }))
   })
 })
