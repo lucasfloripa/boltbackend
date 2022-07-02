@@ -41,7 +41,7 @@ describe('CreateUserProject Controller', () => {
     await sut.handle(mockRequest())
     expect(registerSpy).toHaveBeenCalledWith({ title: 'any-project-title' })
   })
-  test('Should return 500 if RegisterUser throws', async () => {
+  test('Should return 500 if createUserProject throws', async () => {
     const { sut, createUserProjectStub } = makeSut()
     jest.spyOn(createUserProjectStub, 'create').mockImplementationOnce(async () => {
       return await Promise.reject(new Error())
