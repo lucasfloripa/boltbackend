@@ -1,7 +1,7 @@
 import { RegisterUser } from '@/domain/usecases'
 import { RegisterUserController } from '@/presentation/controllers'
 import { EmailInUseError } from '@/presentation/errors'
-import { forbidden, serverError } from '@/presentation/helpers'
+import { badRequest, forbidden, serverError } from '@/presentation/helpers'
 import { Validation } from '@/presentation/protocols'
 import { mockRegisterUserParams } from '@/tests/domain/mocks'
 import { mockRegisterUserStub, mockValidationStub } from '@/tests/presentation/mocks'
@@ -30,6 +30,12 @@ describe('RegisterUser Controller', () => {
     const validateSpy = jest.spyOn(validationStub, 'validate')
     await sut.handle(mockRequest())
     expect(validateSpy).toHaveBeenCalledWith(mockRequest())
+  })
+  test('Should return 400 if Validation returns an error', async () => {
+    const { sut, validationStub } = makeSut()
+    jest.spyOn(validationStub, 'validate').mockReturnValueOnce(new Error())
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(badRequest(new Error()))
   })
   test('Should call RegisterUser with correct values', async () => {
     const { sut, registerUserStub } = makeSut()
