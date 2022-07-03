@@ -4,6 +4,7 @@ export interface EditUserProject {
 
 export namespace EditUserProject {
   export type Params = {
+    projectId: string
     title: string
   }
 }

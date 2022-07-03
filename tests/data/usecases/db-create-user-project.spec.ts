@@ -1,7 +1,7 @@
 import { CreateUserProject } from '@/domain/usecases'
 import { DbCreateUserProject } from '@/data/usecases'
 import { LoadUserByIdRepository, CreateUserProjectRepository } from '@/data/protocols'
-import { mockCreateUserProjectRepository, mockLoadUserByIdRepositoryStub } from '@/tests/data/mocks'
+import { mockCreateUserProjectRepositoryStub, mockLoadUserByIdRepositoryStub } from '@/tests/data/mocks'
 
 const mockRequest = (): CreateUserProject.Params => ({
   userId: 'any-user-id',
@@ -16,7 +16,7 @@ type SutTypes = {
 
 const makeSut = (): SutTypes => {
   const loadUserByIdRepositoryStub = mockLoadUserByIdRepositoryStub()
-  const createUserProjectRepositoryStub = mockCreateUserProjectRepository()
+  const createUserProjectRepositoryStub = mockCreateUserProjectRepositoryStub()
   const sut = new DbCreateUserProject(loadUserByIdRepositoryStub, createUserProjectRepositoryStub)
   return { sut, loadUserByIdRepositoryStub, createUserProjectRepositoryStub }
 }
