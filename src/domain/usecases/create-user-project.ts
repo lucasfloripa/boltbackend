@@ -4,6 +4,7 @@ export interface CreateUserProject {
 
 export namespace CreateUserProject {
   export type Params = {
+    userId: string
     title: string
   }
 }
