@@ -1,3 +1,7 @@
 export * from './mock-encrypter'
 export * from './mock-hash-comparer'
 export * from './mock-load-user-by-email-repository'
+export * from './mock-hasher'
+export * from './mock-id-generator'
+export * from './mock-register-user-repository'
+export * from './mock-check-user-by-email-repository'
