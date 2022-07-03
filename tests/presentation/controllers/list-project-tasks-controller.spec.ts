@@ -3,7 +3,7 @@ import { noContent, serverError, ok, badRequest } from '@/presentation/helpers'
 import { Validation } from '@/presentation/protocols'
 import { ListProjectTasks } from '@/domain/usecases'
 import { mockTask } from '@/tests/domain/mocks'
-import { mockListProjectTasks } from '@/tests/presentation/mocks'
+import { mockListProjectTasksStub } from '@/tests/presentation/mocks'
 import { mockValidationStub } from '@/tests/utils/mocks'
 
 type SutTypes = {
@@ -14,7 +14,7 @@ type SutTypes = {
 
 const makeSut = (): SutTypes => {
   const validationStub = mockValidationStub()
-  const listProjectTasksStub = mockListProjectTasks()
+  const listProjectTasksStub = mockListProjectTasksStub()
   const sut = new ListProjectTasksController(listProjectTasksStub, validationStub)
   return { sut, listProjectTasksStub, validationStub }
 }
