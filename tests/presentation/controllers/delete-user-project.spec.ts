@@ -2,7 +2,7 @@ import { DeleteUserProject } from '@/domain/usecases'
 import { DeleteUserProjectController } from '@/presentation/controllers'
 import { badRequest, ok, serverError, notFound } from '@/presentation/helpers'
 import { Validation } from '@/presentation/protocols'
-import { mockMockDeleteUserProjectStub } from '@/tests/presentation/mocks'
+import { mockDeleteUserProjectStub } from '@/tests/presentation/mocks'
 import { mockValidationStub } from '@/tests/utils/mocks'
 
 const mockRequest = (): DeleteUserProjectController.Params => ({
@@ -16,7 +16,7 @@ type SutTypes = {
 }
 
 const makeSut = (): SutTypes => {
-  const deleteUserProjectStub = mockMockDeleteUserProjectStub()
+  const deleteUserProjectStub = mockDeleteUserProjectStub()
   const validationStub = mockValidationStub()
   const sut = new DeleteUserProjectController(deleteUserProjectStub, validationStub)
   return { sut, deleteUserProjectStub, validationStub }

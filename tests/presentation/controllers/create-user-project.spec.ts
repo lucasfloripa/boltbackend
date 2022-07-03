@@ -2,7 +2,7 @@ import { CreateUserProject } from '@/domain/usecases'
 import { CreateUserProjectController } from '@/presentation/controllers'
 import { badRequest, ok, serverError } from '@/presentation/helpers'
 import { Validation } from '@/presentation/protocols'
-import { mockMockCreateUserProjectStub } from '@/tests/presentation/mocks'
+import { mockCreateUserProjectStub } from '@/tests/presentation/mocks'
 import { mockValidationStub } from '@/tests/utils/mocks'
 
 const mockRequest = (): CreateUserProjectController.Params => ({
@@ -16,7 +16,7 @@ type SutTypes = {
 }
 
 const makeSut = (): SutTypes => {
-  const createUserProjectStub = mockMockCreateUserProjectStub()
+  const createUserProjectStub = mockCreateUserProjectStub()
   const validationStub = mockValidationStub()
   const sut = new CreateUserProjectController(createUserProjectStub, validationStub)
   return { sut, createUserProjectStub, validationStub }
