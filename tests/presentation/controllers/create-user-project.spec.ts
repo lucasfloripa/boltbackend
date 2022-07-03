@@ -1,11 +1,12 @@
 import { CreateUserProject } from '@/domain/usecases'
 import { CreateUserProjectController } from '@/presentation/controllers'
-import { badRequest, ok, serverError } from '@/presentation/helpers'
+import { badRequest, notFound, ok, serverError } from '@/presentation/helpers'
 import { Validation } from '@/presentation/protocols'
 import { mockCreateUserProjectStub } from '@/tests/presentation/mocks'
 import { mockValidationStub } from '@/tests/utils/mocks'
 
 const mockRequest = (): CreateUserProjectController.Params => ({
+  userId: 'any-user-id',
   title: 'any-project-title'
 })
 
@@ -39,7 +40,13 @@ describe('CreateUserProject Controller', () => {
     const { sut, createUserProjectStub } = makeSut()
     const registerSpy = jest.spyOn(createUserProjectStub, 'create')
     await sut.handle(mockRequest())
-    expect(registerSpy).toHaveBeenCalledWith({ title: 'any-project-title' })
+    expect(registerSpy).toHaveBeenCalledWith(mockRequest())
+  })
+  test('Should return 404 if createUserProject not found an project do edit', async () => {
+    const { sut, createUserProjectStub } = makeSut()
+    jest.spyOn(createUserProjectStub, 'create').mockReturnValueOnce(Promise.resolve(false))
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(notFound())
   })
   test('Should return 500 if createUserProject throws', async () => {
     const { sut, createUserProjectStub } = makeSut()

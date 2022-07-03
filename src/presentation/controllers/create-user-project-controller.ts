@@ -1,6 +1,6 @@
 import { Controller, HttpResponse, Validation } from '@/presentation/protocols'
 import { CreateUserProject } from '@/domain/usecases'
-import { badRequest, serverError, ok } from '@/presentation/helpers'
+import { badRequest, serverError, ok, notFound } from '@/presentation/helpers'
 
 export class CreateUserProjectController implements Controller {
   constructor (
@@ -14,7 +14,10 @@ export class CreateUserProjectController implements Controller {
       if (error) {
         return badRequest(error)
       }
-      await this.createUserProject.create(request)
+      const isValid = await this.createUserProject.create(request)
+      if (!isValid) {
+        return notFound()
+      }
       return ok({ message: `Project ${request.title} created!` })
     } catch (error) {
       return serverError(error)
@@ -24,6 +27,7 @@ export class CreateUserProjectController implements Controller {
 
 export namespace CreateUserProjectController {
   export type Params = {
+    userId: string
     title: string
   }
 }
