@@ -5,7 +5,7 @@ import { MongoHelper } from './mongo-helper'
 export class TaskMongoRepository implements LoadTaskByIdRepository, EditProjectTaskRepository, ListProjectTasksRepository, CreateProjectTaskRepository, DeleteProjectTaskRepository {
   async loadById (taskId: string): Promise<Task> {
     const boltTaskCollection = await MongoHelper.getCollection('bolttasks')
-    return await boltTaskCollection.findOne({ taskId }, { projection: { _id: 0 } })
+    return await boltTaskCollection.findOne({ id: taskId }, { projection: { _id: 0 } })
   }
 
   async edit (data: EditProjectTaskRepository.Params): Promise<boolean> {
