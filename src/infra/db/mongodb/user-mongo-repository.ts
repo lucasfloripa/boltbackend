@@ -3,18 +3,18 @@ import { MongoHelper } from './mongo-helper'
 
 export class UserMongoRepository implements LoadUserByEmailRepository, LoadUserByIdRepository, CheckUserByEmailRepository, RegisterUserRepository {
   async loadByEmail (email: string): Promise<LoadUserByEmailRepository.Result> {
-    const userCollection = await MongoHelper.getCollection('boltusers')
-    return await userCollection.findOne({ email }, { projection: { _id: 0 } })
+    const boltUserCollection = await MongoHelper.getCollection('boltusers')
+    return await boltUserCollection.findOne({ email }, { projection: { _id: 0 } })
   }
 
   async loadById (id: string): Promise<LoadUserByIdRepository.Result> {
-    const userCollection = await MongoHelper.getCollection('boltusers')
-    return await userCollection.findOne({ id }, { projection: { _id: 0 } })
+    const boltUserCollection = await MongoHelper.getCollection('boltusers')
+    return await boltUserCollection.findOne({ id }, { projection: { _id: 0 } })
   }
 
   async checkByEmail (email: string): Promise<boolean> {
-    const userCollection = await MongoHelper.getCollection('boltusers')
-    const user = await userCollection.findOne(
+    const boltUserCollection = await MongoHelper.getCollection('boltusers')
+    const user = await boltUserCollection.findOne(
       { email },
       {
         projection: {
@@ -26,8 +26,8 @@ export class UserMongoRepository implements LoadUserByEmailRepository, LoadUserB
   }
 
   async register (data: RegisterUserRepository.Params): Promise<boolean> {
-    const userCollection = await MongoHelper.getCollection('boltusers')
-    const result = await userCollection.insertOne(data)
+    const boltUserCollection = await MongoHelper.getCollection('boltusers')
+    const result = await boltUserCollection.insertOne(data)
     return result.ops[0] !== null
   }
 }
