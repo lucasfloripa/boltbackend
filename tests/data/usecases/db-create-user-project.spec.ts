@@ -1,7 +1,7 @@
 import { CreateUserProject } from '@/domain/usecases'
 import { DbCreateUserProject } from '@/data/usecases'
-import { LoadUserByIdRepository, CreateUserProjectRepository } from '@/data/protocols'
-import { mockCreateUserProjectRepositoryStub, mockLoadUserByIdRepositoryStub } from '@/tests/data/mocks'
+import { LoadUserByIdRepository, CreateUserProjectRepository, IdGenerator } from '@/data/protocols'
+import { mockCreateUserProjectRepositoryStub, mockLoadUserByIdRepositoryStub, mockIdGeneratorStub } from '@/tests/data/mocks'
 
 const mockRequest = (): CreateUserProject.Params => ({
   userId: 'any-user-id',
@@ -12,13 +12,15 @@ type SutTypes = {
   sut: DbCreateUserProject
   loadUserByIdRepositoryStub: LoadUserByIdRepository
   createUserProjectRepositoryStub: CreateUserProjectRepository
+  idGeneratorStub: IdGenerator
 }
 
 const makeSut = (): SutTypes => {
   const loadUserByIdRepositoryStub = mockLoadUserByIdRepositoryStub()
   const createUserProjectRepositoryStub = mockCreateUserProjectRepositoryStub()
-  const sut = new DbCreateUserProject(loadUserByIdRepositoryStub, createUserProjectRepositoryStub)
-  return { sut, loadUserByIdRepositoryStub, createUserProjectRepositoryStub }
+  const idGeneratorStub = mockIdGeneratorStub()
+  const sut = new DbCreateUserProject(loadUserByIdRepositoryStub, createUserProjectRepositoryStub, idGeneratorStub)
+  return { sut, loadUserByIdRepositoryStub, createUserProjectRepositoryStub, idGeneratorStub }
 }
 
 describe('DbCreateUserProject Data Usecase', () => {
@@ -40,12 +42,26 @@ describe('DbCreateUserProject Data Usecase', () => {
     const { sut, createUserProjectRepositoryStub } = makeSut()
     const createSpy = jest.spyOn(createUserProjectRepositoryStub, 'create')
     await sut.create(mockRequest())
-    expect(createSpy).toHaveBeenCalledWith(mockRequest())
+    expect(createSpy).toHaveBeenCalledWith({ id: 'generated_id', ...mockRequest() })
   })
 
   test('Should throw if createUserProjectRepository throws', async () => {
     const { sut, createUserProjectRepositoryStub } = makeSut()
     jest.spyOn(createUserProjectRepositoryStub, 'create').mockImplementationOnce(async () => await Promise.reject(new Error()))
+    const promise = sut.create(mockRequest())
+    await expect(promise).rejects.toThrow()
+  })
+
+  test('Should call idGenerator correctly', async () => {
+    const { sut, idGeneratorStub } = makeSut()
+    const generateSpy = jest.spyOn(idGeneratorStub, 'generate')
+    await sut.create(mockRequest())
+    expect(generateSpy).toHaveBeenCalled()
+  })
+
+  test('Should throw if idGenerator throws', async () => {
+    const { sut, idGeneratorStub } = makeSut()
+    jest.spyOn(idGeneratorStub, 'generate').mockImplementationOnce(async () => await Promise.reject(new Error()))
     const promise = sut.create(mockRequest())
     await expect(promise).rejects.toThrow()
   })

@@ -4,6 +4,7 @@ export interface CreateUserProjectRepository {
 
 export namespace CreateUserProjectRepository {
   export type Params = {
+    id: string
     userId: string
     title: string
   }
