@@ -4,6 +4,7 @@ export interface EditProjectTask {
 
 export namespace EditProjectTask {
   export type Params = {
+    taskId: string
     description?: string
     completed?: boolean
   }
