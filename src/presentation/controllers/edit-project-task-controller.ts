@@ -28,7 +28,7 @@ export class EditProjectTaskController implements Controller {
 export namespace EditProjectTaskController {
   export type Params = {
     taskId: string
-    projectId?: string
+    completed?: boolean
     description?: string
   }
 }

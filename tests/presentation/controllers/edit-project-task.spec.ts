@@ -7,7 +7,7 @@ import { mockValidationStub } from '@/tests/utils/mocks'
 
 const mockRequest = (): EditProjectTaskController.Params => ({
   taskId: 'any-task-id',
-  projectId: 'any-project-id',
+  completed: true,
   description: 'any-new-description'
 })
 
